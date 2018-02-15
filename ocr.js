@@ -1,5 +1,5 @@
 function ksOCR(opt) {
-    opt = opt || {}
+    opt = opt || {} 
     var DATA = { };
     DATA.threshold = opt.threshold || 125;
     DATA.array_image = [];
