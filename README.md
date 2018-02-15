@@ -5,3 +5,6 @@
 
 ### วิธีการใช้งาน
 	<script src="ksOCR.js"></script>
+	<script>
+		var ocrObj = new ksOCR(option);
+	</script>
