@@ -58,18 +58,18 @@
 	        });
 	        $("#metrix").change(function(event) {
 	            var arr = $("#metrix").val().split(",");
-	            var i1 = arr[0];
-	            var i2 = arr[1];
-	            var metrix = ocrData.metrix[i1][i2];
+	            var i = arr[0];
+	            var j = arr[1];
+	            var metrix = ocrData.metrix[i][j];
 	            showData(  metrix  );
 	            var char = ocrObj.Test(metrix);
 	            $("#char").val(char);
 	        });
 	        $("#train").click(function(event) {
 	            var arr = $("#metrix").val().split(",");
-	            var i1 = arr[0];
-	            var i2 = arr[1];
-	            var metrix = ocrData.metrix[i1][i2];
+	            var i = arr[0];
+	            var j = arr[1];
+	            var metrix = ocrData.metrix[i][j];
 	            var char = $("#char").val();
 	            ocrObj.Train(metrix, char);
 	        });
