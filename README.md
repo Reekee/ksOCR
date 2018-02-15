@@ -36,5 +36,5 @@ callback เป็นฟังก์ชั้นส่งค่ากลับ�
 ตัวอย่างการเรียกใช้เมทธอด RecognizeUrl(url, callback)
 
 	ocrObj.RecognizeUrl("img/a-z-.png", function(data) {
-		
+		console.log(data);
 	})
