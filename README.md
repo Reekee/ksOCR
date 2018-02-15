@@ -1,2 +1,2 @@
 # ksOCR
-![capture](https://user-images.githubusercontent.com/28483094/36240355-a9cbd87c-1243-11e8-998e-2701ffc11f49.PNG)
+![capture](https://user-images.githubusercontent.com/28483094/36240444-4d8fa7ea-1244-11e8-8ea5-1e3069b69088.PNG)
