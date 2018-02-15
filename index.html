@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OCR Application</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="ocr.js"></script>
+	<script>
+		$(function() {
+			function showData(data) {
+	            var tb = $("<table border='1'></table>");
+	            $.each(data, function(i1, v1) {
+	                var tr = '<tr>';
+	                $.each(v1, function(i2, v2) {
+	                    var color = "";
+	                    if( v2==1 ) color = 'bgcolor="#000" style="color:#fff"';
+	                    tr += '<td width="22" align="center" '+color+'>'+v2+'</td>';
+	                });
+	                tr += '<tr>';
+	                tb.append(tr);
+	            });
+	            $('#data').html(tb);
+	        }
+	        var ocrObj = new ksOCR({
+	            threshold: 125,
+	            //weight_width : 50,
+	            //weight_height : 50
+	        });
+	        var ocrData;
+	        $("#ocr").click(function(event) {
+	            var d = new Date();
+	            var url = "a-z-.png?t="+d.getTime();
+	            ocrObj.RecognizeUrl(url, function(data) {
+	                ocrData = data;
+	                $("#metrix").html("");
+	                $.each(ocrData.metrix_new, function(i1, v1) {
+	                    $.each(v1, function(i2, v2) {
+	                        $("#metrix").append('<option value="'+i1+','+i2+'">'+i1+','+i2+'</option>');
+	                    });
+	                });
+	                console.log(  ocrData  );
+	                $("#ocr-result").html(ocrData.text);
+	                $("#metrix").change();
+	            });
+	        });
+	        $("#ocr2").click(function(event) {
+	            ocrObj.Recognize(function(data) {
+	                ocrData = data;
+	                $("#metrix").html("");
+	                $.each(ocrData.metrix_new, function(i1, v1) {
+	                    $.each(v1, function(i2, v2) {
+	                        $("#metrix").append('<option value="'+i1+','+i2+'">'+i1+','+i2+'</option>');
+	                    });
+	                });
+	                console.log(  ocrData  );
+	                $("#ocr-result").html(ocrData.text);
+	                $("#metrix").change();
+	            });
+	        });
+	        $("#metrix").change(function(event) {
+	            var arr = $("#metrix").val().split(",");
+	            var i1 = arr[0];
+	            var i2 = arr[1];
+	            var metrix = ocrData.metrix_new[i1][i2];
+	            showData(  metrix  );
+	            var char = ocrObj.Test(metrix);
+	            $("#char").val(char);
+	        });
+	        $("#train").click(function(event) {
+	            var arr = $("#metrix").val().split(",");
+	            var i1 = arr[0];
+	            var i2 = arr[1];
+	            var metrix = ocrData.metrix_new[i1][i2];
+	            var char = $("#char").val();
+	            ocrObj.Train(metrix, char);
+	        });
+	        $("#reset").click(function(event) {
+	            ocrObj.Reset();
+	        });
+	        $("#load").click(function(event) {
+	            ocrObj.Load();
+	        });
+	        $("#upload").click(function(event) {
+	            ocrObj.Upload();
+	        });
+        });
+	</script>
+</head>
+<body style="padding: 50px;">
+    <h2>Recognition</h2>
+    <button type="button" id="ocr">OCR</button>
+    <button type="button" id="ocr2">OCR2</button>
+    <hr>
+    <div>Result: <br><textarea id="ocr-result" cols="80" rows="10" readonly></textarea></div>
+    <hr>
+    <h2>Train data</h2>
+    <select id="metrix"></select><br><br>
+    <input type="text" id="char" maxlength="1">
+    <button type="button" id="train">Train Weight</button>
+    <button type="button" id="reset">Reset Weight</button>
+    <button type="button" id="load">Download Weight</button>
+    <button type="button" id="upload">Upload Weight</button><br><br>
+    <div id="data"></div>
+</body>
+</html>
