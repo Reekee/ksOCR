@@ -28,12 +28,11 @@
 	        });
 	        var ocrData;
 	        $("#ocr").click(function(event) {
-	            var d = new Date();
-	            var url = "img/a-z-.png?t="+d.getTime();
+	            var url = "img/a-z-.png";
 	            ocrObj.RecognizeUrl(url, function(data) {
 	                ocrData = data;
 	                $("#metrix").html("");
-	                $.each(ocrData.metrix_new, function(i1, v1) {
+	                $.each(ocrData.metrix, function(i1, v1) {
 	                    $.each(v1, function(i2, v2) {
 	                        $("#metrix").append('<option value="'+i1+','+i2+'">'+i1+','+i2+'</option>');
 	                    });
@@ -47,7 +46,7 @@
 	            ocrObj.Recognize(function(data) {
 	                ocrData = data;
 	                $("#metrix").html("");
-	                $.each(ocrData.metrix_new, function(i1, v1) {
+	                $.each(ocrData.metrix, function(i1, v1) {
 	                    $.each(v1, function(i2, v2) {
 	                        $("#metrix").append('<option value="'+i1+','+i2+'">'+i1+','+i2+'</option>');
 	                    });
@@ -61,7 +60,7 @@
 	            var arr = $("#metrix").val().split(",");
 	            var i1 = arr[0];
 	            var i2 = arr[1];
-	            var metrix = ocrData.metrix_new[i1][i2];
+	            var metrix = ocrData.metrix[i1][i2];
 	            showData(  metrix  );
 	            var char = ocrObj.Test(metrix);
 	            $("#char").val(char);
@@ -70,7 +69,7 @@
 	            var arr = $("#metrix").val().split(",");
 	            var i1 = arr[0];
 	            var i2 = arr[1];
-	            var metrix = ocrData.metrix_new[i1][i2];
+	            var metrix = ocrData.metrix[i1][i2];
 	            var char = $("#char").val();
 	            ocrObj.Train(metrix, char);
 	        });

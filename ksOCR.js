@@ -118,7 +118,14 @@ function ksOCR(opt) {
                 }
                 DATA.text += "\n";
             }
-            if(callback) callback(DATA);
+            if(callback) callback({
+                threshold: DATA.threshold,
+                weight: DATA.weight,
+                weight_width: DATA.weight_width,
+                weight_height: DATA.weight_height,
+                metrix: DATA.metrix_new,
+                text: DATA.text
+            });
         };
         img.src = url;
     }
