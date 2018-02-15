@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>OCR Application</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="ocr.js"></script>
+	<script src="ksOCR.js"></script>
 	<script>
 		$(function() {
 			function showData(data) {
@@ -22,14 +22,14 @@
 	            $('#data').html(tb);
 	        }
 	        var ocrObj = new ksOCR({
-	            threshold: 125,
-	            //weight_width : 50,
-	            //weight_height : 50
+	            //threshold: 125,
+	            weight_width : 50,
+	            weight_height : 50
 	        });
 	        var ocrData;
 	        $("#ocr").click(function(event) {
 	            var d = new Date();
-	            var url = "a-z-.png?t="+d.getTime();
+	            var url = "img/a-z-.png?t="+d.getTime();
 	            ocrObj.RecognizeUrl(url, function(data) {
 	                ocrData = data;
 	                $("#metrix").html("");
@@ -82,24 +82,23 @@
 	        });
 	        $("#upload").click(function(event) {
 	            ocrObj.Upload();
-	        });
+			});
         });
 	</script>
 </head>
 <body style="padding: 50px;">
     <h2>Recognition</h2>
-    <button type="button" id="ocr">OCR</button>
-    <button type="button" id="ocr2">OCR2</button>
-    <hr>
+    <button type="button" id="ocr">RecognizeUrl</button>
+    <button type="button" id="ocr2">Recognize</button><br><br>
     <div>Result: <br><textarea id="ocr-result" cols="80" rows="10" readonly></textarea></div>
     <hr>
     <h2>Train data</h2>
     <select id="metrix"></select><br><br>
     <input type="text" id="char" maxlength="1">
-    <button type="button" id="train">Train Weight</button>
-    <button type="button" id="reset">Reset Weight</button>
-    <button type="button" id="load">Download Weight</button>
-    <button type="button" id="upload">Upload Weight</button><br><br>
+    <button type="button" id="train">Train</button>
+    <button type="button" id="reset">Reset</button>
+    <button type="button" id="load">Load</button>
+    <button type="button" id="upload">Upload</button><br><br>
     <div id="data"></div>
 </body>
 </html>

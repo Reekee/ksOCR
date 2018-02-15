@@ -36,7 +36,7 @@ function ksOCR(opt) {
         alert("Success.");
     }
     this.Reset = function() {
-        localStorage.removeItem("ocr_weight");
+        localStorage.removeItem("ocr_weight_"+DATA.weight_width+"_"+DATA.weight_height);
         alert("Success.");
     }
     this.Load = function() {
@@ -44,7 +44,7 @@ function ksOCR(opt) {
         var a = document.createElement('a');
         var blob = new Blob([data], {type: 'text/plain'});
         a.href = window.URL.createObjectURL(blob);
-        a.setAttribute("download", "ocr_weight.txt");
+        a.setAttribute("download", "ocr_weight_"+DATA.weight_width+"_"+DATA.weight_height+".txt");
         a.click();
     }
     this.Upload = function() {
@@ -55,22 +55,36 @@ function ksOCR(opt) {
             var reader = new FileReader();
             reader.onload = function(){
                 var text = reader.result;
-                try {
+                var chk = chk_file_weight_upload(text);
+                if( chk[0] ) {
                     var weight = JSON.parse( text );
                     DATA.weight = weight;
                     save_weight();
                     alert("Success.");
-                } catch(e) {
-                    alert("No format");
+                } else {
+                    alert(chk[1]);
                 }
             };
             reader.readAsText(target.files[0]);
         }, false);
         input.click();
     }
+    var chk_file_weight_upload = function(text) {
+        try {
+            var weight = JSON.parse( text );
+            for (var key of Object.keys(weight)) {
+				if( weight[key].length != DATA.weight_height ) return [false, 'No format becouse incorrect height of weight.'];
+                if( !weight[key][0] ) return [false, 'No format becouse incorrect width of weight.'];
+                if( weight[key][0].length != DATA.weight_width ) return [false, 'No format becouse incorrect width of weight.'];
+			}
+        } catch(e) {
+            return [false, 'No format becouse '+e+'.'];
+        }
+        return [true];
+    }
     var load_weight = function() {
         DATA.weight = {};
-        var data = localStorage.getItem("ocr_weight");
+        var data = localStorage.getItem("ocr_weight_"+DATA.weight_width+"_"+DATA.weight_height);
         if( data && data!="" ) {
             try {
                 var obj = JSON.parse( data );
@@ -79,7 +93,7 @@ function ksOCR(opt) {
         }
     }
     var save_weight = function() {
-        localStorage.setItem("ocr_weight", JSON.stringify(DATA.weight) );
+        localStorage.setItem("ocr_weight_"+DATA.weight_width+"_"+DATA.weight_height, JSON.stringify(DATA.weight) );
     }
     var recognize = function(url, callback) {
         DATA.text = "";
@@ -219,8 +233,8 @@ function ksOCR(opt) {
     var test_weight = function(metrix) {
         var char = '?';
         var q_max = 0;
-        Object.keys( DATA.weight ).map(function(objectKey, index) {
-            var weight = DATA.weight[objectKey];
+        for (var key of Object.keys(DATA.weight)) {
+            var weight = DATA.weight[key];
             var candidate = 0;
             var ideal = 0;
             for (var i = 0; i < DATA.weight_height; i++) {
@@ -234,9 +248,9 @@ function ksOCR(opt) {
             var q = candidate / ideal;
             if (q > q_max) {
                 q_max = q;
-                char = String.fromCharCode(objectKey);
+                char = String.fromCharCode(key);
             }
-        });
+        };
         return char;
     }
     var train_weight = function(metrix, char) {
